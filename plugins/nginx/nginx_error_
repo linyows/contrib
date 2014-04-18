@@ -66,9 +66,9 @@ fi
 
 name=`basename $0`
 
-domain=${name/nginx_error/}
-if [[ $domain != '_' && ${#domain} -ne 0 ]]; then
-  domain=${domain:1}
+domain=${name/nginx_error_/}
+
+if [ ${#domain} -ne 0 ]; then
   if [ "$log_pattern" = "" ]; then
     log_pattern='*_access.log'
   fi
