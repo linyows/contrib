@@ -28,8 +28,8 @@ Link this plugin to /etc/munin/plugins/ and restart the munin-node.
 
 This plugin also can be used like wildcard-plugin for monitoring particular virtual host log.
 E.g.
-    ln -s /usr/share/munin/plugins/nginx_error /etc/munin/plugins/nginx_error_mydomaincom
-will parse the log file /var/log/nginx/a.mydomaincom.log
+    ln -s /usr/share/munin/plugins/nginx_error /etc/munin/plugins/nginx_error_my-domain_com
+will parse the log file /var/log/nginx/my-domain_com_access.log
 
 You can change 'env.log_pattern' using asterisk ('*') to match your logs filenames.
 
@@ -70,7 +70,7 @@ domain=${name/nginx_error/}
 if [[ $domain != '_' && ${#domain} -ne 0 ]]; then
   domain=${domain:1}
   if [ -z $log_pattern ]; then
-    log_pattern='a.*.log'
+    log_pattern='*_access.log'
   fi
   log_pattern=${log_pattern/\*/$domain}
 else
