@@ -72,12 +72,12 @@ if [ ${#domain} -ne 0 ]; then
   if [ "$log_pattern" = "" ]; then
     log_pattern='*_access.log'
   fi
-  log_pattern=${log_pattern/\*/$domain}
+  log_name=${log_pattern/\*/$domain}
 else
-  log_pattern='access.log'
+  log_name='access.log'
 fi
 
-log="$log_path/$log_pattern"
+log="$log_path/$log_name"
 
 # declaring an array with http status codes, we are interested in
 declare -A http_codes
@@ -103,7 +103,7 @@ do_ () {
 }
 
 do_config () {
-  echo "graph_title $log_pattern - Nginx errors per minute"
+  echo "graph_title $log_name - Nginx errors per minute"
   echo 'graph_vlabel pages with http error codes / ${graph_period}'
   echo "graph_category nginx"
   echo "graph_period minute"
