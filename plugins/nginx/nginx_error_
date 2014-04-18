@@ -19,7 +19,8 @@ the log file path and the log_pattern.
   [nginx_error*]
     env.log_path    /var/log/nginx
     env.log_pattern *_access.log
-	Nginx must also be configured to log accesses in "combined" log format (default)
+    env.err_prefix [
+    env.err_suffix ]
 
 =head1 USAGE
 
@@ -95,7 +96,7 @@ http_codes[503]='Service Unavailable'
 
 do_ () {
   for k in ${!http_codes[@]}; do
-    value=`awk -v k=$k '{if ($9 == k) { i += 1 }} END { print i }' $log` # this is much better
+    value=`awk -v k="$err_prefix$k$err_suffix" '{if ($9 == k) { i += 1 }} END { print i }' $log`
     echo "error$k.value ${value:-0}"
   done
   exit 0
