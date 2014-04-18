@@ -60,7 +60,7 @@ GPLv3
 
 =cut
 
-if [ -z $logpath ]; then
+if [ "$log_path" = "" ]; then
   log_path='/var/log/nginx'
 fi
 
@@ -69,7 +69,7 @@ name=`basename $0`
 domain=${name/nginx_error/}
 if [[ $domain != '_' && ${#domain} -ne 0 ]]; then
   domain=${domain:1}
-  if [ -z $log_pattern ]; then
+  if [ "$log_pattern" = "" ]; then
     log_pattern='*_access.log'
   fi
   log_pattern=${log_pattern/\*/$domain}
