@@ -14,12 +14,11 @@ Any Linux host, running nginx, with bash version > 4.0
 =head1 CONFIGURATION
 
 This shows the default configuration of this plugin.  You can override
-the log file path and the logpattern.
+the log file path and the log_pattern.
 
-  [nginx_error]
-	env.logpath    /var/log/nginx
-	env.logpattern a.*.log
-
+  [nginx_error*]
+    env.log_path    /var/log/nginx
+    env.log_pattern *_access.log
 	Nginx must also be configured to log accesses in "combined" log format (default)
 
 =head1 USAGE
@@ -31,7 +30,7 @@ E.g.
     ln -s /usr/share/munin/plugins/nginx_error /etc/munin/plugins/nginx_error_mydomaincom
 will parse the log file /var/log/nginx/a.mydomaincom.log
 
-You can change 'env.logpattern' using asterisk ('*') to match your logs filenames.
+You can change 'env.log_pattern' using asterisk ('*') to match your logs filenames.
 
 =head1 INTERPRETATION
 
@@ -61,7 +60,7 @@ GPLv3
 =cut
 
 if [ -z $logpath ]; then
-  logpath='/var/log/nginx'
+  log_path='/var/log/nginx'
 fi
 
 name=`basename $0`
@@ -69,15 +68,15 @@ name=`basename $0`
 domain=${name/nginx_error/}
 if [[ $domain != '_' && ${#domain} -ne 0 ]]; then
   domain=${domain:1}
-  if [ -z $logpattern ]; then
-    logpattern='a.*.log'
+  if [ -z $log_pattern ]; then
+    log_pattern='a.*.log'
   fi
-  logpattern=${logpattern/\*/$domain}
+  log_pattern=${log_pattern/\*/$domain}
 else
-  logpattern='access.log'
+  log_pattern='access.log'
 fi
 
-log="$logpath/$logpattern"
+log="$log_path/$log_pattern"
 
 # declaring an array with http status codes, we are interested in
 declare -A http_codes
@@ -104,7 +103,7 @@ do_ () { # Fetch
 }
 
 do_config () {
-  echo "graph_title $logpattern - Nginx errors per minute"
+  echo "graph_title $log_pattern - Nginx errors per minute"
   echo 'graph_vlabel pages with http error codes / ${graph_period}'
   echo "graph_category nginx"
   echo "graph_period minute"
